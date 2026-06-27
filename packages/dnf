@@ -1,0 +1,12 @@
+git
+openssh-clients
+stow
+vim
+tmux
+htop
+curl
+wget
+ripgrep
+fd-find
+fzf
+neovim
