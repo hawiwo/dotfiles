@@ -157,7 +157,7 @@ set_prompt() {
         status_color="\[\e[1;31m\]"
     fi
 
-    PS1="${prefix}\[\e[1;37m\]\u@\[\e[1;36m\]\h\[\e[1;37m\]:\w ${status_color}\$ \[\e[0m\]"
+    PS1="${prefix}\[\e[1;37m\]\u@\[\e[1;36m\]178.52\[\e[1;37m\]:\w ${status_color}\$ \[\e[0m\]"
 }
 
 PROMPT_COMMAND=set_prompt
