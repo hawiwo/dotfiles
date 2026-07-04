@@ -26,6 +26,11 @@ source /etc/profile
 alias restartgnome="killall -3 gnome-shell"
 alias feh="feh -ZF"
 alias fzfqv="fzf --preview 'bat --style=numbers --color=always {}' | xargs -n 1 nvim"
+alias lspass='find "$HOME" -maxdepth 1 -type f -name ".pass_*" -printf "%f\n"'
+alias xc22='vncviewer 192.168.2.157'
+alias xc650='vncviewer 192.168.2.188'
+alias xspinner='vncviewer 192.168.2.192'
+alias fpdeploy='cd /home/harry/Dokumente/rs && make deploy'
 alias phono="pactl load-module module-loopback source=alsa_input.pci-0000_00_1f.3.analog-stereo"
 
 rdp() {
@@ -44,11 +49,15 @@ alias x201="rdp hwolf /v:192.168.10.201 /u:hwolf /d:ul-dom /w:3300 /h:1300"
 alias x104="rdp hwolf /v:192.168.2.104 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias x110="rdp hwolf /v:192.168.2.110 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xmarianne="rdp hwolf /v:192.168.2.163 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xkg="rdp kg /v:192.168.10.11 /u:kgroezinger /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+alias xkg="rdp kg /v:192.168.2.27 /u:kgroezinger /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+alias x2177="rdp hwolf /v:192.168.2.177 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias x2150="rdp hwolf /v:192.168.2.150 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+alias xudo="rdp uweissflog /v:192.168.10.16 /u:uweissflog /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+alias xtim="rdp timbuesch /v:192.168.10.12 /u:timbüsch /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xcadlaptop1="rdp hwolf /v:192.168.2.48 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xcadlaptop2="rdp hwolf /v:192.168.2.174 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xazubi="rdp ulmer /v:192.168.10.23 /u:azubi /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+alias xmr="rdp mroessler /v:192.168.10.24 /u:mroessler /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xdominik="rdp hwolf /v:192.168.2.168 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xshopfloor="rdp ulmer /v:192.168.2.63 /u:shopfloor1 /d:ul-dom /w:3300 /h:1300"
 alias xmessmaschine="rdp ulmer /v:192.168.2.63 /u:messmaschine /d:ul-dom /w:3300 /h:1300"
@@ -65,6 +74,7 @@ alias vpnon="nmcli connection up id Ulmer"
 alias vpnoff="nmcli connection down id Ulmer"
 alias rename=perl-rename
 alias sshpi="ssh harry@192.168.178.55"
+alias sshhome="ssh harry@192.168.178.52"
 alias dockprune="docker system prune -a --volumes"
 alias chksums="find . -type f -print0 | xargs -0 sha256sum > chksums.txt"
 alias win10="qemu-system-x86_64 \
@@ -126,17 +136,28 @@ frg() {
 }
 
 vpn_active() {
-    nmcli -t -f NAME,TYPE,STATE connection show --active | grep -q "Ulmer:.*:activated"
+    nmcli -t -f NAME,TYPE,STATE connection show --active 2>/dev/null |
+        grep -q "Ulmer:.*:activated"
 }
 
 set_prompt() {
+    local exit_status=$?
+    local prefix
+    local status_color
+
     if vpn_active; then
         prefix="\[\e[42m\e[30m\]VPN AKTIV\[\e[0m\] "
     else
         prefix=""
     fi
 
-    PS1="${prefix}\[\e[1;37m\]harry:\w \`if [ \$? = 0 ]; then echo -e \"\[\e[1;32m\]\"; else echo -e \"\[\e[1;31m\]\"; fi\`\$ \[\e[0m\]"
+    if (( exit_status == 0 )); then
+        status_color="\[\e[1;32m\]"
+    else
+        status_color="\[\e[1;31m\]"
+    fi
+
+    PS1="${prefix}\[\e[1;37m\]\u@\[\e[1;36m\]\h\[\e[1;37m\]:\w ${status_color}\$ \[\e[0m\]"
 }
 
 PROMPT_COMMAND=set_prompt
