@@ -143,7 +143,20 @@ vpn_active() {
 set_prompt() {
     local exit_status=$?
     local prefix
+    local prompt_host
     local status_color
+
+    case "${HOSTNAME%%.*}" in
+        arch-home)
+            prompt_host="178.52"
+            ;;
+        arch-ul)
+            prompt_host="2.97"
+            ;;
+        *)
+            prompt_host="\h"
+            ;;
+    esac
 
     if vpn_active; then
         prefix="\[\e[42m\e[30m\]VPN AKTIV\[\e[0m\] "
@@ -157,7 +170,7 @@ set_prompt() {
         status_color="\[\e[1;31m\]"
     fi
 
-    PS1="${prefix}\[\e[1;37m\]\u@\[\e[1;36m\]178.52\[\e[1;37m\]:\w ${status_color}\$ \[\e[0m\]"
+    PS1="${prefix}\[\e[1;37m\]\u@\[\e[1;36m\]${prompt_host}\[\e[1;37m\]:\w ${status_color}\$ \[\e[0m\]"
 }
 
 PROMPT_COMMAND=set_prompt
