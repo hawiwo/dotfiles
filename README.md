@@ -1,6 +1,6 @@
 # Dotfiles
 
-Persönliche Konfigurationen für Bash, Zsh und Git. Das Repository verwendet
+Persönliche Konfigurationen für Bash, Zsh, Git und Neovim. Das Repository verwendet
 [GNU Stow](https://www.gnu.org/software/stow/), um die Dateien als symbolische
 Links im Home-Verzeichnis bereitzustellen. `bootstrap.sh` installiert die
 benötigten Pakete und richtet die Links ein.
@@ -35,7 +35,7 @@ Das Skript führt folgende Schritte aus:
 2. `~/.ssh` mit sicheren Verzeichnisrechten anlegen.
 3. Optional vorhandene `id_ed25519`-Dateien installieren.
 4. Die GitHub-SSH-Authentifizierung unverbindlich prüfen.
-5. `bash`, `git` und `zsh` mit Stow in `$HOME` verlinken.
+5. `bash`, `git`, `neovim` und `zsh` mit Stow in `$HOME` verlinken.
 
 Bestehende Dateien wie `~/.bashrc` können einen Stow-Konflikt verursachen.
 Sie sollten vor der Installation gesichert oder in das Repository übernommen
@@ -48,6 +48,7 @@ Einzelne Konfigurationen lassen sich unabhängig installieren:
 ```bash
 stow --dir="$HOME/dotfiles" --target="$HOME" bash
 stow --dir="$HOME/dotfiles" --target="$HOME" git
+stow --dir="$HOME/dotfiles" --target="$HOME" neovim
 stow --dir="$HOME/dotfiles" --target="$HOME" zsh
 ```
 
@@ -113,12 +114,13 @@ Arch-Linux-Aktualisierung zu vermeiden.
 .
 ├── bash/.bashrc       Bash-Konfiguration, Aliase und Hilfsfunktionen
 ├── git/.gitconfig     Git-Konfiguration
+├── neovim/.config/    Neovim-Konfiguration und Plugin-Lockfile
 ├── zsh/.zshrc         Zsh-Konfiguration
 ├── packages/          Paketlisten je Paketmanager
 └── bootstrap.sh       Installation und Stow-Einrichtung
 ```
 
-Die Verzeichnisse `bash`, `git` und `zsh` sind Stow-Pakete. Ihre interne
+Die Verzeichnisse `bash`, `git`, `neovim` und `zsh` sind Stow-Pakete. Ihre interne
 Struktur entspricht der späteren Struktur in `$HOME`.
 
 ## Prüfung vor einem Commit
@@ -130,7 +132,7 @@ System prüfen:
 bash -n bootstrap.sh
 bash -n bash/.bashrc
 git diff --check
-stow --simulate --dir="$PWD" --target="$HOME" bash git zsh
+stow --simulate --dir="$PWD" --target="$HOME" bash git neovim zsh
 ```
 
 ## Sicherheit

@@ -52,4 +52,4 @@ if [[ ! -d "$REPO_DIR/.git" ]]; then
     git clone git@github.com:hawiwo/dotfiles.git "$HOME/dotfiles"
 fi
 
-stow --dir="$REPO_DIR" --target="$HOME" bash git zsh
+stow --dir="$REPO_DIR" --target="$HOME" bash git neovim zsh
