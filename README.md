@@ -41,6 +41,39 @@ Bestehende Dateien wie `~/.bashrc` können einen Stow-Konflikt verursachen.
 Sie sollten vor der Installation gesichert oder in das Repository übernommen
 werden.
 
+## FAQ
+
+### Warum bricht Stow wegen einer vorhandenen Neovim-Konfiguration ab?
+
+Wenn `~/.config/nvim/init.lua` bereits als normale Datei vorhanden ist,
+überschreibt Stow sie nicht. Die bestehende Konfiguration sollte zuerst
+gesichert und Stow danach erneut ausgeführt werden:
+
+```bash
+mkdir -p "$HOME/.config/nvim-backup"
+mv "$HOME/.config/nvim/init.lua" "$HOME/.config/nvim-backup/init.lua"
+
+cd "$HOME/dotfiles"
+stow --dir="$PWD" --target="$HOME" bash git neovim zsh
+```
+
+Anschließend können die alte und die neue Konfiguration verglichen werden:
+
+```bash
+diff "$HOME/.config/nvim-backup/init.lua" \
+    "$HOME/dotfiles/neovim/.config/nvim/init.lua"
+```
+
+Das Bootstrap-Skript sollte nicht mit `sudo` gestartet werden, da es für die
+Paketinstallation selbst `sudo` verwendet. Der Hinweis, dass die
+GitHub-SSH-Authentifizierung nicht eingerichtet ist, verursacht den
+Stow-Abbruch nicht und kann bei einem über HTTPS geklonten Repository ignoriert
+werden.
+
+`stow --adopt` kann bestehende Dateien alternativ in das Repository übernehmen,
+dabei aber die dort gespeicherte Konfiguration verändern. Das vorherige Sichern
+ist daher die sicherere Vorgehensweise.
+
 ## Manuelle Einrichtung mit Stow
 
 Einzelne Konfigurationen lassen sich unabhängig installieren:

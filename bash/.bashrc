@@ -27,6 +27,7 @@ alias restartgnome="killall -3 gnome-shell"
 alias feh="feh -ZF"
 alias fzfqv="fzf --preview 'bat --style=numbers --color=always {}' | xargs -n 1 nvim"
 alias lspass='find "$HOME" -maxdepth 1 -type f -name ".pass_*" -printf "%f\n"'
+alias lsdot='find "$HOME" -maxdepth 1 -type f -name ".*" -printf "%f\n"'
 alias xc22='vncviewer 192.168.2.157'
 alias xc650='vncviewer 192.168.2.188'
 alias xspinner='vncviewer 192.168.2.192'
