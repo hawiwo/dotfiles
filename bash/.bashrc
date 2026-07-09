@@ -21,8 +21,8 @@ export FZF_CTRL_T_OPTS="
 --preview 'bat --style=numbers --color=always {}'
 "
 
-
 source /etc/profile
+alias ..="cd .."
 alias restartgnome="killall -3 gnome-shell"
 alias feh="feh -ZF"
 alias fzfqv="fzf --preview 'bat --style=numbers --color=always {}' | xargs -n 1 nvim"
