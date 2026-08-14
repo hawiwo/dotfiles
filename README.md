@@ -43,6 +43,42 @@ werden.
 
 ## FAQ
 
+### Wie update ich einen Remote-PC?
+
+Wenn der Remote-PC per SSH erreichbar ist, können Repository und Stow-Links so
+aktualisiert werden:
+
+```bash
+ssh user@remote-pc
+cd ~/dotfiles
+git pull
+stow --dir="$PWD" --target="$HOME" bash git neovim zsh tmux
+```
+
+Falls auch Pakete aktualisiert werden sollen, hängt der passende Befehl vom
+System ab:
+
+```bash
+# Debian/Ubuntu
+sudo apt update && sudo apt upgrade
+
+# Fedora
+sudo dnf upgrade
+
+# Arch
+sudo pacman -Syu
+```
+
+Wenn der Remote-PC das Dotfiles-Repository noch nicht hat, kann es zuerst
+geklont und eingerichtet werden:
+
+```bash
+ssh user@remote-pc
+git clone https://github.com/hawiwo/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+bash ./bootstrap.sh
+```
+
 ### Warum bricht Stow wegen einer vorhandenen Neovim-Konfiguration ab?
 
 Wenn `~/.config/nvim/init.lua` bereits als normale Datei vorhanden ist,
