@@ -91,6 +91,44 @@ Links eines Pakets können entsprechend entfernt werden:
 stow --delete --dir="$HOME/dotfiles" --target="$HOME" bash
 ```
 
+## Neue Dotfiles aufnehmen
+
+Neue Konfigurationsdateien werden als Stow-Paket in das Repository verschoben.
+Für `~/.dialogrc` wird beispielsweise ein Paket namens `dialog` angelegt:
+
+```bash
+cd "$HOME/dotfiles"
+mkdir -p dialog
+mv "$HOME/.dialogrc" dialog/.dialogrc
+stow --dir="$PWD" --target="$HOME" dialog
+git add dialog/.dialogrc
+```
+
+Danach ist `~/.dialogrc` ein symbolischer Link auf die Datei im Repository. Das
+lässt sich wie folgt prüfen:
+
+```bash
+ls -l "$HOME/.dialogrc"
+```
+
+Damit das Paket bei einer Neuinstallation automatisch eingerichtet wird, muss
+es außerdem am Ende von `bootstrap.sh` in den Stow-Aufruf aufgenommen werden:
+
+```bash
+stow --dir="$REPO_DIR" --target="$HOME" bash dialog git neovim zsh tmux
+```
+
+Vor dem Commit sollten die Änderungen geprüft werden:
+
+```bash
+git diff --check
+stow --simulate --dir="$PWD" --target="$HOME" dialog
+git status
+```
+
+Konfigurationsdateien mit Passwörtern oder anderen Geheimnissen dürfen nicht in
+das Repository aufgenommen werden.
+
 ## RDP-Passwörter
 
 Die RDP-Aliase in `bash/.bashrc` enthalten keine Passwörter. Die Funktion

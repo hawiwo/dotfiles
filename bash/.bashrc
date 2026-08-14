@@ -34,6 +34,58 @@ alias xspinner='vncviewer 192.168.2.192'
 alias fpdeploy='cd /home/harry/Dokumente/rs && make deploy'
 alias phono="pactl load-module module-loopback source=alsa_input.pci-0000_00_1f.3.analog-stereo"
 
+attach() {
+  if (( $# > 1 )); then
+    printf 'Verwendung: attach [SESSION]\n' >&2
+    return 2
+  fi
+
+  local session="$1"
+  local -a sessions menu
+  local i
+
+  if [[ -z "$session" ]]; then
+    mapfile -t sessions < <(tmux list-sessions -F '#S' 2>/dev/null)
+
+    if (( ${#sessions[@]} == 0 )); then
+      session="meinserver"
+    else
+      for i in "${!sessions[@]}"; do
+        menu+=("${sessions[$i]}" "")
+      done
+
+      session=$(
+        /usr/bin/dialog \
+          --keep-tite \
+          --stdout \
+          --title "tmux" \
+          --menu "Sitzung auswählen:" \
+          20 70 12 \
+          "${menu[@]}"
+      ) || return
+    fi
+  fi
+
+  tmux new-session -A -D -s "$session"
+}
+
+hgrep()
+{
+    local suchbegriff="$1"
+
+    history |
+        sed -E 's/^[[:space:]]*[0-9]+[[:space:]]*//;
+                s/[[:space:]]+/ /g;
+                s/^ //;
+                s/ $//' |
+        awk -v begriff="$suchbegriff" '
+            index($0, begriff) == 1 &&
+            (length($0) == length(begriff) ||
+             substr($0, length(begriff) + 1, 1) == " ")
+        ' |
+        sort -u
+}
+
 rdp() {
   local password_file="$HOME/.pass_$1"
   shift
@@ -43,33 +95,83 @@ rdp() {
     return 1
   fi
 
-  xfreerdp3 "$@" "/p:$(< "$password_file")"
+  xfreerdp3 \
+    /w:3300 \
+    /h:1300 \
+    /kbd:layout:0x00000407 \
+    "$@" \
+    "/p:$(< "$password_file")"
 }
 
-alias x201="rdp hwolf /v:192.168.10.201 /u:hwolf /d:ul-dom /w:3300 /h:1300"
-alias x104="rdp hwolf /v:192.168.2.104 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias x110="rdp hwolf /v:192.168.2.110 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xmarianne="rdp hwolf /v:192.168.2.163 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xkg="rdp kg /v:192.168.2.27 /u:kgroezinger /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias x2177="rdp hwolf /v:192.168.2.177 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias x2150="rdp hwolf /v:192.168.2.150 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xudo="rdp uweissflog /v:192.168.10.16 /u:uweissflog /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xtim="rdp timbuesch /v:192.168.10.12 /u:timbüsch /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xcadlaptop1="rdp hwolf /v:192.168.2.48 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xcadlaptop2="rdp hwolf /v:192.168.2.174 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xazubi="rdp ulmer /v:192.168.10.23 /u:azubi /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xmr="rdp mroessler /v:192.168.10.24 /u:mroessler /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xdominik="rdp hwolf /v:192.168.2.168 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xshopfloor="rdp ulmer /v:192.168.2.63 /u:shopfloor1 /d:ul-dom /w:3300 /h:1300"
-alias xmessmaschine="rdp ulmer /v:192.168.2.63 /u:messmaschine /d:ul-dom /w:3300 /h:1300"
-alias x154="rdp hwolf /v:192.168.2.154 /u:ulmer /w:3300 /h:1300"
-alias x2.87="rdp ulmer /v:192.168.2.87 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias x2.12="rdp ulmer /v:192.168.2.12 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xveeam="rdp ulmer /v:192.168.2.87 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xhome="rdp gnomerdp /v:192.168.2.97 /u:harry /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xguul="rdp gulmer /v:192.168.2.53 /u:gulmer /d:ul-dom /w:1920 /h:1200"
-alias xam="rdp hwolf /v:192.168.2.90 /u:hwolf /d:ul-dom /w:1920 /h:1200"
-alias xlotta25="rdp treichert /v:192.168.2.27 /u:treichert /d:ul-dom /w:1920 /h:1200"
+alias x201="rdp hwolf /v:192.168.10.201 /u:hwolf /d:ul-dom"
+alias x104="rdp hwolf /v:192.168.2.104 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias x109="rdp hwolf /v:192.168.2.109 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias x110="rdp hwolf /v:192.168.2.110 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xmarianne="rdp hwolf /v:192.168.2.163 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xkg="rdp kg /v:192.168.2.27 /u:kgroezinger /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias x2177="rdp hwolf /v:192.168.2.177 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias x2150="rdp hwolf /v:192.168.2.150 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xudo="rdp uweissflog /v:192.168.10.16 /u:uweissflog /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xtim="rdp timbuesch /v:192.168.10.12 /u:timbüsch /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xcadlaptop1="rdp hwolf /v:192.168.2.48 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xcadlaptop2="rdp hwolf /v:192.168.2.174 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xazubi="rdp ulmer /v:192.168.10.23 /u:azubi /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xazubi_ashwolf="rdp hwolf /v:192.168.10.23 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xmr="rdp mroessler /v:192.168.10.24 /u:mroessler /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xza="rdp zalbrecht /v:192.168.2.62 /u:zalbrecht /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xtb="rdp tb /v:192.168.10.17 /u:tbangerdt /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xdominik="rdp hwolf /v:192.168.2.168 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xshopfloor="rdp ulmer /v:192.168.2.63 /u:shopfloor1 /d:ul-dom"
+alias xmessmaschine="rdp ulmer /v:192.168.2.63 /u:messmaschine /d:ul-dom"
+alias x154="rdp hwolf /v:192.168.2.154 /u:ulmer"
+alias x2.87="rdp ulmer /v:192.168.2.87 /u:ulmer /cert:tofu /auth-pkg-list:none,ntlm"
+alias x2.12="rdp ulmer /v:192.168.2.12 /u:ulmer /cert:tofu /auth-pkg-list:none,ntlm"
+alias xveeam="rdp ulmer /v:192.168.2.87 /u:ulmer /cert:tofu /auth-pkg-list:none,ntlm"
+alias xhome="rdp gnomerdp /v:192.168.2.97 /u:harry /cert:tofu /auth-pkg-list:none,ntlm"
+alias xguul="rdp gulmer /v:192.168.2.53 /u:gulmer /d:ul-dom"
+alias xam="rdp hwolf /v:192.168.2.90 /u:hwolf /d:ul-dom"
+alias xlotta25="rdp treichert /v:192.168.2.27 /u:treichert /d:ul-dom"
+alias xwareneingang="rdp ulmer /v:LEV359678A.ul-dom.ulmer-automation.de /u:wareneingang /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+
+# rdp() {
+#   local password_file="$HOME/.pass_$1"
+#   shift
+# 
+#   if [[ ! -r "$password_file" ]]; then
+#     printf 'Passwortdatei nicht lesbar: %s\n' "$password_file" >&2
+#     return 1
+#   fi
+# 
+#   xfreerdp3 "$@" "/p:$(< "$password_file")"
+# }
+# 
+# alias x201="rdp hwolf /v:192.168.10.201 /u:hwolf /d:ul-dom /w:3300 /h:1300"
+# alias x104="rdp hwolf /v:192.168.2.104 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias x109="rdp hwolf /v:192.168.2.109 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias x110="rdp hwolf /v:192.168.2.110 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xmarianne="rdp hwolf /v:192.168.2.163 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xkg="rdp kg /v:192.168.2.27 /u:kgroezinger /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias x2177="rdp hwolf /v:192.168.2.177 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias x2150="rdp hwolf /v:192.168.2.150 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xudo="rdp uweissflog /v:192.168.10.16 /u:uweissflog /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xtim="rdp timbuesch /v:192.168.10.12 /u:timbüsch /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xcadlaptop1="rdp hwolf /v:192.168.2.48 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xcadlaptop2="rdp hwolf /v:192.168.2.174 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xazubi="rdp ulmer /v:192.168.10.23 /u:azubi /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xmr="rdp mroessler /v:192.168.10.24 /u:mroessler /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xza="rdp zalbrecht /v:192.168.2.62 /u:zalbrecht /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xtb="rdp tb /v:192.168.10.17 /u:tbangerdt /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xdominik="rdp hwolf /v:192.168.2.168 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xshopfloor="rdp ulmer /v:192.168.2.63 /u:shopfloor1 /d:ul-dom /w:3300 /h:1300"
+# alias xmessmaschine="rdp ulmer /v:192.168.2.63 /u:messmaschine /d:ul-dom /w:3300 /h:1300"
+# alias x154="rdp hwolf /v:192.168.2.154 /u:ulmer /w:3300 /h:1300"
+# alias x2.87="rdp ulmer /v:192.168.2.87 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias x2.12="rdp ulmer /v:192.168.2.12 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xveeam="rdp ulmer /v:192.168.2.87 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xhome="rdp gnomerdp /v:192.168.2.97 /u:harry /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+# alias xguul="rdp gulmer /v:192.168.2.53 /u:gulmer /d:ul-dom /w:1920 /h:1200"
+# alias xam="rdp hwolf /v:192.168.2.90 /u:hwolf /d:ul-dom /w:1920 /h:1200"
+# alias xlotta25="rdp treichert /v:192.168.2.27 /u:treichert /d:ul-dom /w:1920 /h:1200"
 alias bsv="gvncviewer 192.168.178.70"
 alias vpnon="nmcli connection up id Ulmer"
 alias vpnoff="nmcli connection down id Ulmer"
