@@ -46,6 +46,7 @@ rdp() {
   xfreerdp3 "$@" "/p:$(< "$password_file")"
 }
 
+alias xgnome="rdp xharry /v:192.168.2.97 /u:harry /w:3300 /h:1300 /from-stdin"
 alias x201="rdp hwolf /v:192.168.10.201 /u:hwolf /d:ul-dom /w:3300 /h:1300"
 alias x104="rdp hwolf /v:192.168.2.104 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias x110="rdp hwolf /v:192.168.2.110 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
@@ -58,6 +59,8 @@ alias xtim="rdp timbuesch /v:192.168.10.12 /u:timbüsch /d:ul-dom /w:3300 /h:130
 alias xcadlaptop1="rdp hwolf /v:192.168.2.48 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xcadlaptop2="rdp hwolf /v:192.168.2.174 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xazubi="rdp ulmer /v:192.168.10.23 /u:azubi /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+alias xhome="rdp hwolf /v:192.168.2.97 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
+#alias xhome="rdp hwolf /v:192.168.2.97 /u:harry /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xmr="rdp mroessler /v:192.168.10.24 /u:mroessler /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xdominik="rdp hwolf /v:192.168.2.168 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xshopfloor="rdp ulmer /v:192.168.2.63 /u:shopfloor1 /d:ul-dom /w:3300 /h:1300"
@@ -66,7 +69,6 @@ alias x154="rdp hwolf /v:192.168.2.154 /u:ulmer /w:3300 /h:1300"
 alias x2.87="rdp ulmer /v:192.168.2.87 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias x2.12="rdp ulmer /v:192.168.2.12 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xveeam="rdp ulmer /v:192.168.2.87 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xhome="rdp gnomerdp /v:192.168.2.97 /u:harry /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
 alias xguul="rdp gulmer /v:192.168.2.53 /u:gulmer /d:ul-dom /w:1920 /h:1200"
 alias xam="rdp hwolf /v:192.168.2.90 /u:hwolf /d:ul-dom /w:1920 /h:1200"
 alias xlotta25="rdp treichert /v:192.168.2.27 /u:treichert /d:ul-dom /w:1920 /h:1200"
@@ -119,6 +121,45 @@ alias clever-tanken='python3 /home/harry/Dokumente/info/Programmieren/Python/cle
 
 #alias fzfp="fzf --preview 'bat --style=numbers --color=always {}'"
 #alias fzfvim="nvim $(fzf)"
+
+cdgo()
+{
+    local file
+    file=$(type -P "$1")
+
+    if [[ -z "$file" ]]; then
+        echo "Nicht im PATH gefunden: $1"
+        return 1
+    fi
+
+    cd "$(dirname "$file")" || return
+}
+
+pushdgo()
+{
+    local file
+    file=$(type -P "$1")
+
+    if [[ -z "$file" ]]; then
+        echo "Nicht im PATH gefunden: $1"
+        return 1
+    fi
+
+    cd "$(dirname "$file")" || return
+}
+
+nvimgo()
+{
+    local file
+    file=$(whereis "$1" | cut -d: -f2- | xargs -n1 | head -n1)
+
+    if [[ -z "$file" ]]; then
+        echo "Nicht gefunden: $1"
+        return 1
+    fi
+
+    nvim "$file"
+}
 
 fshow() {
   git log --oneline | fzf | awk '{print $1}' | xargs git show
