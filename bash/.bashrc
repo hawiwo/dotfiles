@@ -34,6 +34,17 @@ alias xspinner='vncviewer 192.168.2.192'
 alias fpdeploy='cd /home/harry/Dokumente/rs && make deploy'
 alias phono="pactl load-module module-loopback source=alsa_input.pci-0000_00_1f.3.analog-stereo"
 
+# Listet alle definierten Aliase und Funktionen alphabetisch sortiert auf.
+listdefs() {
+      printf '=== Aliase ===\n'
+      alias | LC_ALL=C sort
+
+      printf '\n=== Funktionen ===\n'
+      compgen -A function | LC_ALL=C sort
+  }
+
+
+# Öffnet eine vorhandene tmux-Sitzung oder erstellt eine neue.
 attach() {
   if (( $# > 1 )); then
     printf 'Verwendung: attach [SESSION]\n' >&2
@@ -69,6 +80,7 @@ attach() {
   tmux new-session -A -D -s "$session"
 }
 
+# Sucht am Anfang bereinigter Einträge im Bash-Verlauf nach einem Begriff.
 hgrep()
 {
     local suchbegriff="$1"
@@ -86,6 +98,7 @@ hgrep()
         sort -u
 }
 
+# Startet eine RDP-Verbindung und liest das Passwort aus ~/.pass_BENUTZER.
 rdp() {
   local password_file="$HOME/.pass_$1"
   shift
@@ -103,7 +116,6 @@ rdp() {
     "/p:$(< "$password_file")"
 }
 
-<<<<<<< HEAD
 alias x201="rdp hwolf /v:192.168.10.201 /u:hwolf /d:ul-dom"
 alias x104="rdp hwolf /v:192.168.2.104 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias x109="rdp hwolf /v:192.168.2.109 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
@@ -132,75 +144,8 @@ alias xhome="rdp gnomerdp /v:192.168.2.97 /u:harry /cert:tofu /auth-pkg-list:non
 alias xguul="rdp gulmer /v:192.168.2.53 /u:gulmer /d:ul-dom"
 alias xam="rdp hwolf /v:192.168.2.90 /u:hwolf /d:ul-dom"
 alias xlotta25="rdp treichert /v:192.168.2.27 /u:treichert /d:ul-dom"
+alias xjherrmann="rdp jherrmann /v:TSP39800.ul-dom.ulmer-automation.de /u:treichert /d:ul-dom"
 alias xwareneingang="rdp ulmer /v:LEV359678A.ul-dom.ulmer-automation.de /u:wareneingang /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
-
-# rdp() {
-#   local password_file="$HOME/.pass_$1"
-#   shift
-# 
-#   if [[ ! -r "$password_file" ]]; then
-#     printf 'Passwortdatei nicht lesbar: %s\n' "$password_file" >&2
-#     return 1
-#   fi
-# 
-#   xfreerdp3 "$@" "/p:$(< "$password_file")"
-# }
-# 
-# alias x201="rdp hwolf /v:192.168.10.201 /u:hwolf /d:ul-dom /w:3300 /h:1300"
-# alias x104="rdp hwolf /v:192.168.2.104 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias x109="rdp hwolf /v:192.168.2.109 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias x110="rdp hwolf /v:192.168.2.110 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xmarianne="rdp hwolf /v:192.168.2.163 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xkg="rdp kg /v:192.168.2.27 /u:kgroezinger /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias x2177="rdp hwolf /v:192.168.2.177 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias x2150="rdp hwolf /v:192.168.2.150 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xudo="rdp uweissflog /v:192.168.10.16 /u:uweissflog /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xtim="rdp timbuesch /v:192.168.10.12 /u:timbüsch /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xcadlaptop1="rdp hwolf /v:192.168.2.48 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xcadlaptop2="rdp hwolf /v:192.168.2.174 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xazubi="rdp ulmer /v:192.168.10.23 /u:azubi /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xmr="rdp mroessler /v:192.168.10.24 /u:mroessler /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xza="rdp zalbrecht /v:192.168.2.62 /u:zalbrecht /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xtb="rdp tb /v:192.168.10.17 /u:tbangerdt /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xdominik="rdp hwolf /v:192.168.2.168 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xshopfloor="rdp ulmer /v:192.168.2.63 /u:shopfloor1 /d:ul-dom /w:3300 /h:1300"
-# alias xmessmaschine="rdp ulmer /v:192.168.2.63 /u:messmaschine /d:ul-dom /w:3300 /h:1300"
-# alias x154="rdp hwolf /v:192.168.2.154 /u:ulmer /w:3300 /h:1300"
-# alias x2.87="rdp ulmer /v:192.168.2.87 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias x2.12="rdp ulmer /v:192.168.2.12 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xveeam="rdp ulmer /v:192.168.2.87 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xhome="rdp gnomerdp /v:192.168.2.97 /u:harry /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-# alias xguul="rdp gulmer /v:192.168.2.53 /u:gulmer /d:ul-dom /w:1920 /h:1200"
-# alias xam="rdp hwolf /v:192.168.2.90 /u:hwolf /d:ul-dom /w:1920 /h:1200"
-# alias xlotta25="rdp treichert /v:192.168.2.27 /u:treichert /d:ul-dom /w:1920 /h:1200"
-=======
-alias xgnome="rdp xharry /v:192.168.2.97 /u:harry /w:3300 /h:1300 /from-stdin"
-alias x201="rdp hwolf /v:192.168.10.201 /u:hwolf /d:ul-dom /w:3300 /h:1300"
-alias x104="rdp hwolf /v:192.168.2.104 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias x110="rdp hwolf /v:192.168.2.110 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xmarianne="rdp hwolf /v:192.168.2.163 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xkg="rdp kg /v:192.168.2.27 /u:kgroezinger /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias x2177="rdp hwolf /v:192.168.2.177 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias x2150="rdp hwolf /v:192.168.2.150 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xudo="rdp uweissflog /v:192.168.10.16 /u:uweissflog /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xtim="rdp timbuesch /v:192.168.10.12 /u:timbüsch /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xcadlaptop1="rdp hwolf /v:192.168.2.48 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xcadlaptop2="rdp hwolf /v:192.168.2.174 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xazubi="rdp ulmer /v:192.168.10.23 /u:azubi /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xhome="rdp hwolf /v:192.168.2.97 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-#alias xhome="rdp hwolf /v:192.168.2.97 /u:harry /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xmr="rdp mroessler /v:192.168.10.24 /u:mroessler /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xdominik="rdp hwolf /v:192.168.2.168 /u:hwolf /d:ul-dom /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xshopfloor="rdp ulmer /v:192.168.2.63 /u:shopfloor1 /d:ul-dom /w:3300 /h:1300"
-alias xmessmaschine="rdp ulmer /v:192.168.2.63 /u:messmaschine /d:ul-dom /w:3300 /h:1300"
-alias x154="rdp hwolf /v:192.168.2.154 /u:ulmer /w:3300 /h:1300"
-alias x2.87="rdp ulmer /v:192.168.2.87 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias x2.12="rdp ulmer /v:192.168.2.12 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xveeam="rdp ulmer /v:192.168.2.87 /u:ulmer /w:3300 /h:1300 /cert:tofu /auth-pkg-list:none,ntlm"
-alias xguul="rdp gulmer /v:192.168.2.53 /u:gulmer /d:ul-dom /w:1920 /h:1200"
-alias xam="rdp hwolf /v:192.168.2.90 /u:hwolf /d:ul-dom /w:1920 /h:1200"
-alias xlotta25="rdp treichert /v:192.168.2.27 /u:treichert /d:ul-dom /w:1920 /h:1200"
->>>>>>> e13470855b2d8a4f525f50bdbecdcee174cf100c
 alias bsv="gvncviewer 192.168.178.70"
 alias vpnon="nmcli connection up id Ulmer"
 alias vpnoff="nmcli connection down id Ulmer"
@@ -251,6 +196,7 @@ alias clever-tanken='python3 /home/harry/Dokumente/info/Programmieren/Python/cle
 #alias fzfp="fzf --preview 'bat --style=numbers --color=always {}'"
 #alias fzfvim="nvim $(fzf)"
 
+# Wechselt in das Verzeichnis, das die angegebene ausführbare Datei enthält.
 cdgo()
 {
     local file
@@ -264,6 +210,7 @@ cdgo()
     cd "$(dirname "$file")" || return
 }
 
+# Wechselt in das Verzeichnis, das die angegebene ausführbare Datei enthält.
 pushdgo()
 {
     local file
@@ -277,6 +224,7 @@ pushdgo()
     cd "$(dirname "$file")" || return
 }
 
+# Öffnet den ersten von whereis gefundenen Pfad in Neovim.
 nvimgo()
 {
     local file
@@ -290,14 +238,17 @@ nvimgo()
     nvim "$file"
 }
 
+# Wählt einen Git-Commit mit fzf aus und zeigt ihn mit git show an.
 fshow() {
   git log --oneline | fzf | awk '{print $1}' | xargs git show
 }
 
+# Wählt einen Prozess mit fzf aus und beendet ihn mit SIGKILL.
 fkill() {
   ps -ef | fzf | awk '{print $2}' | xargs kill -9
 }
 
+# Durchsucht Dateien mit ripgrep und öffnet einen fzf-Treffer in Neovim.
 frg() {
   rg --line-number --no-heading --color=always "$@" |
   fzf --ansi \
@@ -306,11 +257,13 @@ frg() {
       --bind 'enter:become(nvim {1} +{2})'
 }
 
+# Prüft, ob die NetworkManager-Verbindung "Ulmer" aktiv ist.
 vpn_active() {
     nmcli -t -f NAME,TYPE,STATE connection show --active 2>/dev/null |
         grep -q "Ulmer:.*:activated"
 }
 
+# Erzeugt den Bash-Prompt abhängig von Host, VPN-Status und letztem Exit-Code.
 set_prompt() {
     local exit_status=$?
     local prefix
@@ -346,14 +299,17 @@ set_prompt() {
 
 PROMPT_COMMAND=set_prompt
 
+# Durchsucht ~/.ALLFILES ohne Beachtung der Groß- und Kleinschreibung.
 ff() {
   grep -i "$@" "$HOME/.ALLFILES"
 }
 
+# Wählt mit fd und fzf ein Unterverzeichnis aus und wechselt dorthin.
 fcd() {
   cd "$(fd --type d | fzf)"
 }
 
+# Wechselt anhand eines festgelegten Kurzschlüssels in ein Zielverzeichnis.
 qcd ()
 {
     # Nimmt 1 Argument entgegen, das ein String-Schlüssel ist, und
@@ -380,6 +336,7 @@ qcd ()
 # Einrichten einer Tab-Ergänzung
 complete -W "haraldwolf helenewolf erbe" qcd
 
+# Führt deutsche OCR für die angegebenen PDF-Dateien direkt an Ort und Stelle aus.
 ocrpdf() {
     for f in "$@"; do
         /usr/bin/ocrmypdf -l deu --skip-text --rotate-pages --optimize 3 "$f" "$f"
