@@ -1,5 +1,7 @@
 set -o vi
-export CDPATH=$HOME:$HOME/Dokumente/data:$HOME/homassistant
+
+eval "$(direnv hook bash)"
+
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.local/bin:/home/harry/Dokumente/exp:$PATH
 export EDITOR=nvim
@@ -344,7 +346,6 @@ set_prompt() {
     PS1="${prefix}\[\e[1;37m\]\u@\[\e[1;36m\]${prompt_host}\[\e[1;37m\]:\w ${status_color}\$ \[\e[0m\]"
 }
 
-PROMPT_COMMAND=set_prompt
 
 ff() {
   grep -i "$@" "$HOME/.ALLFILES"
@@ -386,45 +387,4 @@ ocrpdf() {
     done
 }
 
-#chrootsda3() {
-#    local host_uid root="$HOME/sda3"
-#    host_uid=$(id -u)
-#
-#    if mountpoint -q "$root"; then
-#        echo "Unmounting..."
-#
-#        sudo umount "$root/run/user/$host_uid" 2>/dev/null
-#        sudo umount "$root/tmp" 2>/dev/null
-#        sudo umount "$root/run" 2>/dev/null
-#        sudo umount "$root/sys" 2>/dev/null
-#        sudo umount "$root/proc" 2>/dev/null
-#        sudo umount "$root/dev" 2>/dev/null
-#        sudo umount "$root/home" 2>/dev/null
-#        sudo umount "$root" 2>/dev/null
-#
-#        return
-#    fi
-#
-#    echo "Mounting and entering chroot..."
-#
-#    mkdir -p "$root"/{dev,proc,sys,run,tmp,home}
-#    mkdir -p "$root/run/user/$host_uid"
-#
-#    sudo mount -o subvol=root /dev/sda3 "$root" || return
-#    sudo mount -o subvol=home /dev/sda3 "$root/home" || return
-#
-#    for i in dev proc sys run tmp; do
-#        sudo mount --bind "/$i" "$root/$i" || return
-#    done
-#
-#    sudo mount --bind "/run/user/$host_uid" "$root/run/user/$host_uid" || return
-#
-#    sudo chroot "$root" su - harry -c '
-#uid=$(id -u)
-#export XDG_RUNTIME_DIR=/run/user/$uid
-#export WAYLAND_DISPLAY=wayland-0
-#export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$uid/bus
-#export DISPLAY=:0
-#exec bash
-#'
-#}
+eval "$(direnv hook bash)"
