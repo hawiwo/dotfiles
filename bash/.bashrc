@@ -343,5 +343,4 @@ ocrpdf() {
         /usr/bin/ocrmypdf -l deu --skip-text --rotate-pages --optimize 3 "$f" "$f"
     done
 }
-
-eval "$(direnv hook bash)"
+PROMPT_COMMAND=set_prompt
