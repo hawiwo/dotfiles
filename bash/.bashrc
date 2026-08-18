@@ -1,6 +1,5 @@
 set -o vi
 
-eval "$(direnv hook bash)"
 
 export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$ANDROID_HOME/emulator:$ANDROID_HOME/tools:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$HOME/.local/bin:/home/harry/Dokumente/exp:$PATH
@@ -124,6 +123,7 @@ alias x109="rdp hwolf /v:192.168.2.109 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-l
 alias x110="rdp hwolf /v:192.168.2.110 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias xmarianne="rdp hwolf /v:192.168.2.163 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias xkg="rdp kg /v:192.168.2.27 /u:kgroezinger /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xbp="rdp hwolf /v:192.168.2.41 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias x2177="rdp hwolf /v:192.168.2.177 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias x2150="rdp hwolf /v:192.168.2.150 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias xudo="rdp uweissflog /v:192.168.10.16 /u:uweissflog /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
@@ -132,12 +132,15 @@ alias xcadlaptop1="rdp hwolf /v:192.168.2.48 /u:hwolf /d:ul-dom /cert:tofu /auth
 alias xcadlaptop2="rdp hwolf /v:192.168.2.174 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias xazubi="rdp ulmer /v:192.168.10.23 /u:azubi /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias xazubi_ashwolf="rdp hwolf /v:192.168.10.23 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xjmagin="rdp hwolf /v:192.168.2.50 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
+alias xfaro="rdp hwolf /v:192.168.10.27 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias xmr="rdp mroessler /v:192.168.10.24 /u:mroessler /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias xza="rdp zalbrecht /v:192.168.2.62 /u:zalbrecht /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias xtb="rdp tb /v:192.168.10.17 /u:tbangerdt /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias xdominik="rdp hwolf /v:192.168.2.168 /u:hwolf /d:ul-dom /cert:tofu /auth-pkg-list:none,ntlm"
 alias xshopfloor="rdp ulmer /v:192.168.2.63 /u:shopfloor1 /d:ul-dom"
 alias xmessmaschine="rdp ulmer /v:192.168.2.63 /u:messmaschine /d:ul-dom"
+alias xastrit="rdp hwolf /v:192.168.10.10 /u:hwolf /d:ul-dom"
 alias x154="rdp hwolf /v:192.168.2.154 /u:ulmer"
 alias x2.87="rdp ulmer /v:192.168.2.87 /u:ulmer /cert:tofu /auth-pkg-list:none,ntlm"
 alias x2.12="rdp ulmer /v:192.168.2.12 /u:ulmer /cert:tofu /auth-pkg-list:none,ntlm"
@@ -344,3 +347,5 @@ ocrpdf() {
     done
 }
 PROMPT_COMMAND=set_prompt
+
+eval "$(direnv hook bash)"
