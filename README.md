@@ -35,7 +35,7 @@ Das Skript führt folgende Schritte aus:
 2. `~/.ssh` mit sicheren Verzeichnisrechten anlegen.
 3. Optional vorhandene `id_ed25519`-Dateien installieren.
 4. Die GitHub-SSH-Authentifizierung unverbindlich prüfen.
-5. `bash`, `git`, `neovim` und `zsh` mit Stow in `$HOME` verlinken.
+5. `bash`, `neovim`, `zsh` und `tmux` mit Stow in `$HOME` verlinken.
 
 Bestehende Dateien wie `~/.bashrc` können einen Stow-Konflikt verursachen.
 Sie sollten vor der Installation gesichert oder in das Repository übernommen

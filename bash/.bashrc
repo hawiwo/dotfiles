@@ -304,6 +304,7 @@ set_prompt() {
 
 
 # Durchsucht ~/.ALLFILES ohne Beachtung der Groß- und Kleinschreibung.
+unalias ff 2>/dev/null
 ff() {
   grep -i "$@" "$HOME/.ALLFILES"
 }
